@@ -1,11 +1,20 @@
 import eslintjs from "@eslint/js";
 import globals from "globals";
+import babelParser from "@babel/eslint-parser";
 
 export default [
 	eslintjs.configs.recommended,
 	{
 		languageOptions: {
 			sourceType: "module",
+			parser: babelParser,
+			parserOptions: {
+				requireConfigFile: false,
+				babelOptions: {
+					plugins: ["@babel/plugin-syntax-import-attributes"]
+				}
+				
+			},
 			globals: {
 			   	...globals.node
 			}
@@ -35,7 +44,7 @@ export default [
 			"grouped-accessor-pairs": "error",
 			"guard-for-in": "warn",
 			"id-denylist": ["error"],
-			"id-length": ["error", { "min": 3 }],
+			"id-length": ["error", { "min": 2 }],
 			"logical-assignment-operators": "warn",
 			"max-classes-per-file": ["error", { "max": 1 }],
 			"max-depth": ["error", { "max": 3 }],

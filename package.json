@@ -16,6 +16,9 @@
     "discord.js": "^14.16.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.25.2",
+    "@babel/eslint-parser": "^7.25.1",
+    "@babel/plugin-syntax-import-attributes": "^7.25.6",
     "@eslint/js": "^9.11.0",
     "eslint": "^9.11.0",
     "globals": "^15.9.0"
