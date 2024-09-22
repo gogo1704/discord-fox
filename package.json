@@ -1,0 +1,20 @@
+{
+  "name": "discord-fox",
+  "version": "1.0.0",
+  "description": "Epic Discord Bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "GogoFox",
+  "license": "ISC",
+  "homepage": "https://github.com/gogo1704/discord-fox",
+  "repository": "github:gogo1704/discord-fox",
+  "dependencies": {
+    "discord.js": "^14.16.2"
+  },
+  "devDependencies": {
+    "eslint": "^9.10.0"
+  }
+}
