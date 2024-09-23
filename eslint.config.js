@@ -34,7 +34,7 @@ export default [
 			"accessor-pairs": ["error", { "getWithoutSet": true }],
 			"block-scoped-var": "error",
 			"camelcase": "error",
-			"complexity": ["warn", { "max": 4 }],
+			"complexity": ["warn", { "max": 10 }],
 			"curly": ["error", "multi-line"],
 			"default-case": "error",
 			"default-case-last": "error",
