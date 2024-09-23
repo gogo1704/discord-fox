@@ -1,46 +1,49 @@
-const { REST, Routes } = require('discord.js');
-const { clientId, guildId, token } = require('./config.json');
-const fs = require('node:fs');
-const path = require('node:path');
+import { REST, Routes } from "discord.js";
+import config from "./config.json" with { type: "json" };
+import * as fs from 'node:fs/promises';
 
-const commands = [];
-// Grab all the command folders from the commands directory you created earlier
-const foldersPath = path.join(__dirname, 'commands');
-const commandFolders = fs.readdirSync(foldersPath);
-
-for (const folder of commandFolders) {
-	// Grab all the command files from the commands directory you created earlier
-	const commandsPath = path.join(foldersPath, folder);
-	const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
-	// Grab the SlashCommandBuilder#toJSON() output of each command's data for deployment
-	for (const file of commandFiles) {
-		const filePath = path.join(commandsPath, file);
-		const command = require(filePath);
-		if ('data' in command && 'execute' in command) {
-			commands.push(command.data.toJSON());
-		} else {
-			console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
-		}
-	}
+async function getScriptFilesFromDirectory(directory) {
+	const files = await fs.readdir(directory, { recursive: true });
+	return files.filter(file => file.endsWith('.js'));
 }
 
-// Construct and prepare an instance of the REST module
-const rest = new REST().setToken(token);
+async function getCommandDataJSON(filePath) {
+	const importedCommand = await import(filePath);
+	const command = importedCommand.default;
+	if (!("data" in command) || !('execute' in command)) {
+		console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+		return;
+	}
+	return command.data.toJSON();
+}
 
-// and deploy your commands!
-(async () => {
+async function getAllCommandDataArray(filePathsArray) {
+	const commandDataArray = [];
+	for (const commandFilePath of filePathsArray) {
+		commandDataArray.push(getCommandDataJSON(`./commands/${commandFilePath}`));
+	}
+	return await Promise.all(commandDataArray);
+}
+
+async function deployCommands(commandDataArray) {
 	try {
-		console.log(`Started refreshing ${commands.length} application (/) commands.`);
+		console.log(`Started refreshing ${commandDataArray.length} application (/) commands.`);
 
-		// The put method is used to fully refresh all commands in the guild with the current set
 		const data = await rest.put(
-			Routes.applicationGuildCommands(clientId, guildId),
-			{ body: commands },
+			Routes.applicationGuildCommands(config.clientId, config.guildId),
+			{ body: commandDataArray },
 		);
 
 		console.log(`Successfully reloaded ${data.length} application (/) commands.`);
 	} catch (error) {
-		// And of course, make sure you catch and log any errors!
 		console.error(error);
 	}
-})();
+}
+
+const commandFilePaths = await getScriptFilesFromDirectory("commands");
+
+const commandData = await getAllCommandDataArray(commandFilePaths);
+
+const rest = new REST().setToken(config.token);
+
+deployCommands(commandData);
