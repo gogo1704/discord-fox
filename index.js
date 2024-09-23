@@ -44,10 +44,10 @@ for (const commandFilePath of commandFilePaths) {
 	setCommand(`./commands/${commandFilePath}`);
 }
 
-const eventFilePaths = await getScriptFilesFromDirectory("events")
+const eventFilePaths = await getScriptFilesFromDirectory("events");
 
 for (const eventFilePath of eventFilePaths) {
 	registerEventListener(`./events/${eventFilePath}`);
 }
 
-client.login(config.token)
+client.login(config.token);

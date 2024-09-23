@@ -8,4 +8,4 @@ export default {
 	async execute(interaction) {
 		await interaction.reply('Pong!');
 	},
-}
+};

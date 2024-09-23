@@ -16,7 +16,7 @@ export default [
 				
 			},
 			globals: {
-			   	...globals.node
+				...globals.node
 			}
 		},
 		rules: {
@@ -48,10 +48,10 @@ export default [
 			"logical-assignment-operators": "warn",
 			"max-classes-per-file": ["error", { "max": 1 }],
 			"max-depth": ["error", { "max": 3 }],
-			"max-lines-per-function": ["warn", { "max": 30, "skipBlankLines": true, "skipComments": true}],
+			"max-lines-per-function": ["warn", { "max": 30, "skipBlankLines": true, "skipComments": true }],
 			"max-nested-callbacks": ["warn", { "max": 5 }],
 			"max-params": ["warn", { "max": 3 }],
-			"max-statements": ["warn", { "max": 10 }],
+			"max-statements": ["warn", { "max": 15 }],
 			"new-cap": "error",
 			"no-array-constructor": "error",
 			"no-caller": "error",
