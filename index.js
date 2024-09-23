@@ -1,4 +1,4 @@
-import * as fs from 'node:fs';
+import * as fs from 'node:fs/promises';
 import { Client, Collection, GatewayIntentBits } from "discord.js";
 import config from "./config.json" with { type: "json" };
 
@@ -7,7 +7,14 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 client.cooldowns = new Collection();
 client.commands = new Collection();
 
-const commandFilePaths = fs.readdirSync("commands", { recursive: true }).filter(file => file.endsWith('.js'));
+
+async function getScriptFilesFromDirectory(directory) {
+	const files = await fs.readdir(directory, { recursive: true })
+	return files.filter(file => file.endsWith('.js'));
+}
+
+
+const commandFilePaths = await getScriptFilesFromDirectory("commands")
 
 async function setCommand(filePath) {
 	const importedCommand = await import(filePath);
@@ -24,7 +31,7 @@ for (const commandFilePath of commandFilePaths) {
 	setCommand(`./commands/${commandFilePath}`);
 }
 
-const eventFilePaths = fs.readdirSync("events", { recursive: true }).filter(file => file.endsWith('.js'));
+const eventFilePaths = await getScriptFilesFromDirectory("events")
 
 
 async function registerEventListener(filePath) {
